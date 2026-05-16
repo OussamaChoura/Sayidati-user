@@ -7,7 +7,7 @@ import { useCart } from '@/context/CartContext';
 import { useFavorites } from '@/context/FavoritesContext';
 import { CATEGORY_META } from '@/lib/categoryMeta';
 
-const API = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
+const API = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
 
 interface NavCategory { slug: string; name: string; description: string; icon: string; }
 
