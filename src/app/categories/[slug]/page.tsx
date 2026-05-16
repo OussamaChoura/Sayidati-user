@@ -1,3 +1,4 @@
+export const runtime = 'edge';
 import { getCategory, getProducts, getCategories } from '@/lib/api';
 import { notFound } from 'next/navigation';
 import Navbar from '@/components/Navbar';

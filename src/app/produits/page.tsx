@@ -1,3 +1,4 @@
+export const runtime = 'edge';
 import { getProducts, getCategories, getBrands } from '@/lib/api';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
