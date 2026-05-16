@@ -1,0 +1,20 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-inter: 'Inter', sans-serif;
+  --font-playfair: 'Playfair Display', serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+.btn-primary {
+  @apply inline-block bg-rose-600 text-white px-6 py-3 rounded-full font-semibold hover:bg-rose-700 transition-colors duration-200;
+}
+
+.btn-outline {
+  @apply inline-block border-2 border-rose-600 text-rose-600 px-6 py-3 rounded-full font-semibold hover:bg-rose-600 hover:text-white transition-colors duration-200;
+}
