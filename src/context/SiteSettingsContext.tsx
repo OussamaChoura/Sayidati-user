@@ -1,7 +1,7 @@
 'use client';
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 
-const API = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+const API = process.env.NEXT_PUBLIC_API_URL || 'https://sayidati-backend-php-production.up.railway.app';
 
 type Settings = Record<string, string>;
 
