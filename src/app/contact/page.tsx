@@ -3,6 +3,8 @@ import Footer from '@/components/Footer';
 import { MapPin, Phone, Mail, Clock } from 'lucide-react';
 import type { Metadata } from 'next';
 
+export const runtime = 'edge';
+
 export const metadata: Metadata = {
   title: 'Contactez-nous – Sayidati',
   description: 'Contactez l\'équipe Sayidati pour toute question sur nos produits ou votre commande.',
