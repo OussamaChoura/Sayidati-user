@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import { Inter, Playfair_Display } from 'next/font/google';
 import './globals.css';
 import { CartProvider } from '@/context/CartContext';
 import { FavoritesProvider } from '@/context/FavoritesContext';
@@ -7,11 +6,7 @@ import { SiteSettingsProvider } from '@/context/SiteSettingsContext';
 import CartSidebar from '@/components/CartSidebar';
 import AnnouncementBanner from '@/components/AnnouncementBanner';
 
-const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
-const playfair = Playfair_Display({
-  subsets: ['latin'],
-  variable: '--font-playfair',
-});
+export const runtime = 'edge';
 
 export const metadata: Metadata = {
   title: 'Sayidati – Parfums & Beauté Féminine',
@@ -33,7 +28,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="fr">
-      <body className={`${inter.variable} ${playfair.variable} font-sans bg-white text-gray-900`}>
+      <body className="font-sans bg-white text-gray-900">
         <SiteSettingsProvider>
           <CartProvider>
             <FavoritesProvider>

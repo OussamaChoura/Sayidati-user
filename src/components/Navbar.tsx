@@ -7,9 +7,9 @@ import { useCart } from '@/context/CartContext';
 import { useFavorites } from '@/context/FavoritesContext';
 import { CATEGORY_META } from '@/lib/categoryMeta';
 
-const NAV_CATEGORIES = Object.entries(CATEGORY_META).map(([slug, m]) => ({
-  slug, name: m.nameFr, description: m.shortDescription, icon: m.icon,
-}));
+const API = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
+
+interface NavCategory { slug: string; name: string; description: string; icon: string; }
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -17,11 +17,36 @@ export default function Navbar() {
   const [mobileCategOpen, setMobileCategOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [navCategories, setNavCategories] = useState<NavCategory[]>(() =>
+    Object.entries(CATEGORY_META).map(([slug, m]) => ({
+      slug, name: m.nameFr, description: m.shortDescription, icon: m.icon,
+    }))
+  );
   const { count, openCart } = useCart();
   const { count: favCount } = useFavorites();
   const dropdownRef = useRef<HTMLDivElement>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
+
+  useEffect(() => {
+    fetch(`${API}/api/v1/categories`)
+      .then((r) => r.ok ? r.json() : null)
+      .then((data: { slug: string; nameFr: string }[] | null) => {
+        if (!data) return;
+        setNavCategories(
+          data.map((cat) => {
+            const meta = CATEGORY_META[cat.slug];
+            return {
+              slug: cat.slug,
+              name: cat.nameFr,
+              description: meta?.shortDescription ?? '',
+              icon: meta?.icon ?? '🛍️',
+            };
+          })
+        );
+      })
+      .catch(() => {});
+  }, []);
 
   function handleSearchSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -97,7 +122,7 @@ export default function Navbar() {
                 >
                   <span className="text-rose-600 font-semibold text-sm">Voir toutes les catégories →</span>
                 </Link>
-                {NAV_CATEGORIES.map((cat) => (
+                {navCategories.map((cat) => (
                   <Link
                     key={cat.slug}
                     href={`/categories/${cat.slug}`}
@@ -198,7 +223,7 @@ export default function Navbar() {
             </button>
             {mobileCategOpen && (
               <div className="pb-2 pl-2 grid grid-cols-2 gap-1">
-                {NAV_CATEGORIES.map((cat) => (
+                {navCategories.map((cat) => (
                   <Link
                     key={cat.slug}
                     href={`/categories/${cat.slug}`}
