@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { ShoppingBag, Shield, Truck, RotateCcw, ChevronRight, ChevronLeft, Leaf } from 'lucide-react';
+import { ShoppingBag, Shield, Truck, RotateCcw, ChevronRight, ChevronLeft } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
 import StarRating from '@/components/StarRating';
 import { calcDiscount } from '@/lib/utils';
@@ -18,8 +18,8 @@ export default function ProductDetailClient({
 }) {
   const { addItem } = useCart();
   const [qty, setQty] = useState(1);
-  const [activeTab, setActiveTab] = useState<'description' | 'dpp'>('description');
   const [activeIdx, setActiveIdx] = useState(0);
+  const [selectedOptions, setSelectedOptions] = useState<Record<string, string>>({});
 
   const allImages: string[] = [
     ...(product.imageUrl ? [product.imageUrl] : []),
@@ -28,7 +28,22 @@ export default function ProductDetailClient({
   if (allImages.length === 0) allImages.push(`https://picsum.photos/seed/${product.sku}/600/600`);
   const price = Number(product.price);
   const origPrice = product.originalPrice ? Number(product.originalPrice) : null;
-  const discount = calcDiscount(price, origPrice);
+
+  // Variant logic
+  const activeVariants = (product.variants ?? []).filter(v => v.isActive);
+  const optionKeys = activeVariants.length > 0
+    ? [...new Set(activeVariants.flatMap(v => Object.keys(v.options)))]
+    : [];
+  const selectedVariant = optionKeys.length > 0 && optionKeys.every(k => selectedOptions[k])
+    ? activeVariants.find(v => optionKeys.every(k => v.options[k] === selectedOptions[k])) ?? null
+    : null;
+  const allOptionsSelected = optionKeys.length === 0 || optionKeys.every(k => !!selectedOptions[k]);
+  const displayPrice = selectedVariant?.price != null ? selectedVariant.price : price;
+  const displayOrigPrice = selectedVariant?.originalPrice != null ? selectedVariant.originalPrice : origPrice;
+  const displayStock = selectedVariant != null ? selectedVariant.stock : product.stock;
+  const displayInStock = selectedVariant != null ? selectedVariant.stock > 0 : product.inStock;
+  const mainDisplayImage = selectedVariant?.imageUrl ?? allImages[activeIdx];
+  const discount = calcDiscount(displayPrice, displayOrigPrice);
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
@@ -59,9 +74,9 @@ export default function ProductDetailClient({
           {/* Main image */}
           <div className="relative w-full aspect-square rounded-3xl overflow-hidden bg-gray-50">
             <Image
-              key={allImages[activeIdx]}
-              src={allImages[activeIdx]}
-              alt={`${product.nameFr} – photo ${activeIdx + 1}`}
+              key={mainDisplayImage}
+              src={mainDisplayImage}
+              alt={`${product.nameFr}`}
               fill
               className="object-cover transition-opacity duration-300"
               sizes="(max-width: 1024px) 100vw, 50vw"
@@ -148,11 +163,11 @@ export default function ProductDetailClient({
           {/* Price */}
           <div className="flex items-end gap-3">
             <span className="text-3xl font-bold text-gray-900">
-              {price.toFixed(3)} {product.currency}
+              {Number(displayPrice).toFixed(3)} {product.currency}
             </span>
-            {origPrice && (
+            {displayOrigPrice && (
               <span className="text-lg text-gray-400 line-through mb-0.5">
-                {origPrice.toFixed(3)}
+                {Number(displayOrigPrice).toFixed(3)}
               </span>
             )}
           </div>
@@ -160,15 +175,59 @@ export default function ProductDetailClient({
           {/* Stock */}
           <div className="flex items-center gap-2">
             <span
-              className={`w-2.5 h-2.5 rounded-full ${product.inStock ? 'bg-green-500' : 'bg-red-400'}`}
+              className={`w-2.5 h-2.5 rounded-full ${displayInStock ? 'bg-green-500' : 'bg-red-400'}`}
             />
-            <span className={`text-sm font-medium ${product.inStock ? 'text-green-700' : 'text-red-600'}`}>
-              {product.inStock ? 'En stock' : 'Rupture de stock'}
+            <span className={`text-sm font-medium ${displayInStock ? 'text-green-700' : 'text-red-600'}`}>
+              {displayInStock ? 'En stock' : 'Rupture de stock'}
             </span>
-            {product.inStock && product.stock <= 5 && (
-              <span className="text-xs text-orange-500">— Plus que {product.stock} disponibles</span>
+            {displayInStock && displayStock <= 5 && (
+              <span className="text-xs text-orange-500">— Plus que {displayStock} disponibles</span>
             )}
           </div>
+
+          {/* Variant selector */}
+          {optionKeys.length > 0 && (
+            <div className="space-y-3">
+              {optionKeys.map(key => {
+                const values = [...new Set(activeVariants.map(v => v.options[key]).filter(Boolean))];
+                return (
+                  <div key={key}>
+                    <p className="text-sm font-medium text-gray-700 mb-1.5">
+                      {key}
+                      {selectedOptions[key] && <span className="font-normal text-gray-500 ml-1.5">— {selectedOptions[key]}</span>}
+                    </p>
+                    <div className="flex flex-wrap gap-2">
+                      {values.map(val => {
+                        const hasVariant = activeVariants.some(v =>
+                          optionKeys.every(k => k === key ? v.options[k] === val : (!selectedOptions[k] || v.options[k] === selectedOptions[k]))
+                        );
+                        return (
+                          <button
+                            key={val}
+                            type="button"
+                            onClick={() => setSelectedOptions(o => ({ ...o, [key]: val }))}
+                            disabled={!hasVariant}
+                            className={`px-3.5 py-1.5 rounded-full text-sm font-medium border transition-colors ${
+                              selectedOptions[key] === val
+                                ? 'bg-rose-600 text-white border-rose-600'
+                                : hasVariant
+                                ? 'bg-white text-gray-700 border-gray-300 hover:border-rose-400'
+                                : 'bg-gray-50 text-gray-300 border-gray-200 cursor-not-allowed'
+                            }`}
+                          >
+                            {val}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                );
+              })}
+              {!allOptionsSelected && (
+                <p className="text-xs text-amber-600 bg-amber-50 rounded-xl px-3 py-2">Sélectionnez toutes les options pour ajouter au panier.</p>
+              )}
+            </div>
+          )}
 
           {/* Qty + Add */}
           <div className="flex items-stretch gap-3">
@@ -191,7 +250,7 @@ export default function ProductDetailClient({
             </div>
             <button
               onClick={() => addItem(product, qty)}
-              disabled={!product.inStock}
+              disabled={!displayInStock || !allOptionsSelected}
               className="flex-1 h-12 bg-rose-600 text-white rounded-full font-semibold hover:bg-rose-700 transition-colors flex items-center justify-center gap-2 disabled:bg-gray-300 disabled:cursor-not-allowed"
             >
               <ShoppingBag size={18} />
@@ -215,75 +274,18 @@ export default function ProductDetailClient({
         </div>
       </div>
 
-      {/* Tabs: description + DPP */}
+      {/* Description */}
       <div className="mb-16">
-        <div className="flex gap-1 border-b mb-6">
-          {(['description', 'dpp'] as const).map((tab) => (
-            <button
-              key={tab}
-              onClick={() => setActiveTab(tab)}
-              className={`px-5 py-3 text-sm font-medium transition-colors border-b-2 -mb-px ${
-                activeTab === tab
-                  ? 'border-rose-600 text-rose-600'
-                  : 'border-transparent text-gray-500 hover:text-gray-700'
-              }`}
-            >
-              {tab === 'description' ? 'Description' : (
-                <span className="flex items-center gap-1"><Leaf size={14} /> Passeport Produit</span>
-              )}
-            </button>
-          ))}
+        <h2 className="font-serif text-2xl font-bold text-gray-900 mb-4">Description</h2>
+        <div className="prose max-w-none text-gray-700">
+          {product.descriptionFr
+            ? product.descriptionFr.split('\n').map((p, i) =>
+                p.trim() ? <p key={i}>{p}</p> : <br key={i} />
+              )
+            : <p>Aucune description disponible.</p>
+          }
         </div>
-
-        {activeTab === 'description' && (
-          <div className="prose max-w-none text-gray-700">
-            <p>{product.descriptionFr || 'Aucune description disponible.'}</p>
-            <p className="text-sm text-gray-400 mt-2">SKU: {product.sku}</p>
-          </div>
-        )}
-
-        {activeTab === 'dpp' && product.dpp ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="bg-green-50 rounded-2xl p-5 space-y-3">
-              <h3 className="font-semibold text-green-800 flex items-center gap-2">
-                <Leaf size={16} /> Informations de traçabilité
-              </h3>
-              <p className="text-sm text-gray-600">
-                <strong>Pays de fabrication:</strong> {product.dpp.country}
-              </p>
-              {product.dpp.carbonFootprint && (
-                <p className="text-sm text-gray-600">
-                  <strong>Empreinte carbone:</strong> {Number(product.dpp.carbonFootprint).toFixed(2)} kg CO₂
-                </p>
-              )}
-              <p className="text-sm text-gray-600">
-                <strong>Recyclable:</strong> {product.dpp.recyclable ? '✅ Oui' : '❌ Non'}
-              </p>
-              {product.dpp.certifications.length > 0 && (
-                <div>
-                  <strong className="text-sm text-gray-600">Certifications:</strong>
-                  <div className="flex flex-wrap gap-2 mt-1">
-                    {product.dpp.certifications.map((c) => (
-                      <span key={c} className="bg-green-100 text-green-700 text-xs px-2 py-1 rounded-full">
-                        {c}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
-            {product.dpp.ingredients.length > 0 && (
-              <div className="bg-gray-50 rounded-2xl p-5">
-                <h3 className="font-semibold text-gray-800 mb-3">Ingrédients (INCI)</h3>
-                <p className="text-xs text-gray-600 leading-relaxed">
-                  {product.dpp.ingredients.join(', ')}
-                </p>
-              </div>
-            )}
-          </div>
-        ) : activeTab === 'dpp' ? (
-          <p className="text-gray-400 text-sm">Aucune information de passeport produit disponible.</p>
-        ) : null}
+        <p className="text-sm text-gray-400 mt-4">Réf. : {product.sku}</p>
       </div>
 
       {/* Related products */}

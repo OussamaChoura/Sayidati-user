@@ -11,17 +11,13 @@ const API = process.env.NEXT_PUBLIC_API_URL || 'https://sayidati-backend-php-pro
 
 interface NavCategory { slug: string; name: string; description: string; icon: string; }
 
-export default function Navbar() {
+export default function Navbar({ initialCategories }: { initialCategories?: NavCategory[] }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [mobileCategOpen, setMobileCategOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const [navCategories, setNavCategories] = useState<NavCategory[]>(() =>
-    Object.entries(CATEGORY_META).map(([slug, m]) => ({
-      slug, name: m.nameFr, description: m.shortDescription, icon: m.icon,
-    }))
-  );
+  const [navCategories, setNavCategories] = useState<NavCategory[]>(initialCategories ?? []);
   const { count, openCart } = useCart();
   const { count: favCount } = useFavorites();
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -29,9 +25,10 @@ export default function Navbar() {
   const router = useRouter();
 
   useEffect(() => {
+    if (initialCategories && initialCategories.length > 0) return;
     fetch(`${API}/api/v1/categories`)
       .then((r) => r.ok ? r.json() : null)
-      .then((data: { slug: string; nameFr: string }[] | null) => {
+      .then((data: { slug: string; nameFr: string; description: string }[] | null) => {
         if (!data) return;
         setNavCategories(
           data.map((cat) => {
@@ -39,7 +36,7 @@ export default function Navbar() {
             return {
               slug: cat.slug,
               name: cat.nameFr,
-              description: meta?.shortDescription ?? '',
+              description: cat.description ?? meta?.shortDescription ?? '',
               icon: meta?.icon ?? '🛍️',
             };
           })

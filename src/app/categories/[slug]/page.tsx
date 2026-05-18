@@ -1,8 +1,6 @@
 export const runtime = 'edge';
 import { getCategory, getProducts, getCategories } from '@/lib/api';
 import { notFound } from 'next/navigation';
-import Navbar from '@/components/Navbar';
-import Footer from '@/components/Footer';
 import ProductCard from '@/components/ProductCard';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -41,9 +39,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
   const totalPages = Math.ceil(productsData.total / productsData.limit);
 
   return (
-    <>
-      <Navbar />
-      <main className="pt-16 min-h-screen">
+    <main className="pt-16 min-h-screen">
         {/* Category hero */}
         <div className="relative h-48 md:h-64 bg-rose-100 overflow-hidden">
           {category.imageUrl && (
@@ -131,7 +127,5 @@ export default async function CategoryPage({ params, searchParams }: Props) {
           )}
         </div>
       </main>
-      <Footer />
-    </>
   );
 }

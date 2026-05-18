@@ -1,8 +1,6 @@
 export const runtime = 'edge';
 import { getProduct, getProducts } from '@/lib/api';
 import { notFound } from 'next/navigation';
-import Navbar from '@/components/Navbar';
-import Footer from '@/components/Footer';
 import ProductDetailClient from './ProductDetailClient';
 import ProductJsonLd from '@/components/JsonLd/ProductJsonLd';
 import type { Metadata } from 'next';
@@ -38,11 +36,9 @@ export default async function ProductDetailPage({ params }: Props) {
   return (
     <>
       <ProductJsonLd product={product} />
-      <Navbar />
       <main className="pt-16 min-h-screen">
         <ProductDetailClient product={product} relatedProducts={relatedProducts} />
       </main>
-      <Footer />
     </>
   );
 }

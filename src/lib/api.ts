@@ -2,8 +2,8 @@ import type { Category, PaginatedProducts, Product } from './types';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://sayidati-backend-php-production.up.railway.app';
 
-async function apiFetch<T>(path: string): Promise<T> {
-  const res = await fetch(`${API_URL}${path}`, { cache: 'no-store' });
+async function apiFetch<T>(path: string, init?: RequestInit): Promise<T> {
+  const res = await fetch(`${API_URL}${path}`, init ?? { cache: 'no-store' });
   if (!res.ok) throw new Error(`API error: ${res.status} ${path}`);
   return res.json() as Promise<T>;
 }
@@ -40,7 +40,7 @@ export async function getProduct(sku: string): Promise<Product> {
 }
 
 export async function getCategories(): Promise<Category[]> {
-  return apiFetch<Category[]>('/api/v1/categories');
+  return apiFetch<Category[]>('/api/v1/categories', { next: { revalidate: 300 } } as RequestInit);
 }
 
 export async function getCategory(slug: string): Promise<Category> {

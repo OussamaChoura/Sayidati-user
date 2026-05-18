@@ -1,14 +1,10 @@
 import Link from 'next/link';
-import Navbar from '@/components/Navbar';
-import Footer from '@/components/Footer';
 
 export const runtime = 'edge';
 
 export default function NotFound() {
   return (
-    <>
-      <Navbar />
-      <main className="pt-16 min-h-screen flex items-center justify-center bg-rose-50">
+    <main className="pt-16 min-h-screen flex items-center justify-center bg-rose-50">
         <div className="text-center px-4">
           <p className="font-serif text-9xl font-bold text-rose-200 select-none">404</p>
           <h1 className="font-serif text-3xl font-bold text-gray-900 -mt-4">Page introuvable</h1>
@@ -19,8 +15,6 @@ export default function NotFound() {
             Retour à l'accueil
           </Link>
         </div>
-      </main>
-      <Footer />
-    </>
+    </main>
   );
 }

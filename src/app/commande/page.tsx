@@ -1,8 +1,6 @@
 ﻿'use client';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import Navbar from '@/components/Navbar';
-import Footer from '@/components/Footer';
 import { useCart } from '@/context/CartContext';
 import { getProductImage } from '@/lib/utils';
 import Image from 'next/image';
@@ -87,19 +85,28 @@ export default function CommandePage() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          ...form,
-          source: 'website',
+          customerName:    form.customerName,
+          customerPhone:   form.customerPhone,
+          customerEmail:   form.customerEmail || undefined,
+          customerAddress: form.address || undefined,
+          customerCity:    form.city || undefined,
+          notes:           form.notes || undefined,
+          source:          'website',
           paymentMethod,
-          items: items.map((i) => ({ productId: i.product.id, quantity: i.quantity })),
+          shippingFee:     SHIPPING,
+          items: items.map((i) => ({ sku: i.product.sku, quantity: i.quantity })),
         }),
       });
-      if (!res.ok) throw new Error('Order failed');
+      if (!res.ok) {
+        const errData = await res.json().catch(() => ({}));
+        throw new Error(errData.error || `Erreur ${res.status}`);
+      }
       const order = await res.json();
       setOrderId(order.id);
       clearCart();
       setSuccess(true);
-    } catch {
-      alert('Une erreur est survenue. Veuillez reessayer.');
+    } catch (err) {
+      alert(err instanceof Error ? err.message : 'Une erreur est survenue. Veuillez réessayer.');
     } finally {
       setLoading(false);
     }
@@ -109,9 +116,7 @@ export default function CommandePage() {
 
   if (items.length === 0 && !success) {
     return (
-      <>
-        <Navbar />
-        <main className="pt-16 min-h-screen flex items-center justify-center">
+      <main className="pt-16 min-h-screen flex items-center justify-center">
           <div className="text-center">
             <p className="text-gray-500 text-lg">Votre panier est vide.</p>
             <button onClick={() => router.push('/produits')} className="btn-primary mt-4">
@@ -119,15 +124,11 @@ export default function CommandePage() {
             </button>
           </div>
         </main>
-        <Footer />
-      </>
-    );
+  );
   }
 
   return (
-    <>
-      <Navbar />
-      <main className="pt-16 min-h-screen bg-gray-50">
+    <main className="pt-16 min-h-screen bg-gray-50">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
 
           {success ? (
@@ -305,7 +306,5 @@ export default function CommandePage() {
           )}
         </div>
       </main>
-      <Footer />
-    </>
   );
 }

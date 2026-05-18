@@ -28,7 +28,7 @@ export default async function FeaturedProducts() {
         {featured.length === 0 ? (
           <p className="text-center text-gray-400 py-12">Aucun produit disponible pour le moment.</p>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {featured.map((product) => (
               <div key={product.id}>
                 <ProductJsonLd product={product} />

@@ -1,3 +1,16 @@
+export interface Variant {
+  id: string;
+  name: string;
+  options: Record<string, string>;
+  price: number | null;
+  buyingPrice: number | null;
+  originalPrice: number | null;
+  sku: string | null;
+  stock: number;
+  imageUrl: string | null;
+  isActive: boolean;
+}
+
 export interface Product {
   id: string;
   sku: string;
@@ -11,11 +24,13 @@ export interface Product {
   imageUrls: string[];
   stock: number;
   inStock: boolean;
+  isVisible: boolean;
   badge: string | null;
   rating: string;
   reviewCount: number;
   categoryId: string;
   category?: Category;
+  variants: Variant[];
   dpp?: DPP | null;
 }
 
@@ -25,6 +40,7 @@ export interface Category {
   nameFr: string;
   description: string | null;
   imageUrl: string | null;
+  productsCount?: number;
   _count?: { products: number };
 }
 

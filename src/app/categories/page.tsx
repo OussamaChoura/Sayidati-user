@@ -1,8 +1,6 @@
 export const runtime = 'edge';
 import Image from 'next/image';
 import Link from 'next/link';
-import Navbar from '@/components/Navbar';
-import Footer from '@/components/Footer';
 import { getCategories } from '@/lib/api';
 import { CATEGORY_META } from '@/lib/categoryMeta';
 import type { Metadata } from 'next';
@@ -21,9 +19,7 @@ export default async function CategoriesPage() {
   }
 
   return (
-    <>
-      <Navbar />
-      <main className="pt-16 min-h-screen">
+    <main className="pt-16 min-h-screen">
         {/* Page hero */}
         <div className="bg-rose-50 py-16 text-center">
           <p className="text-rose-500 uppercase tracking-widest text-sm font-semibold mb-2">
@@ -97,8 +93,6 @@ export default async function CategoriesPage() {
             Voir tous les produits
           </Link>
         </section>
-      </main>
-      <Footer />
-    </>
+    </main>
   );
 }

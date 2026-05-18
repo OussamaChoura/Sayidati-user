@@ -97,16 +97,15 @@ export default function Footer() {
             </h3>
             <ul className="space-y-2 text-sm">
               {[
-                'À propos de nous',
-                'Conditions de vente',
-                'Politique de confidentialité',
-                'Livraison & retours',
-                'FAQ',
-                'Passeport Produit (DPP)',
+                { label: 'À propos de nous',             href: '/a-propos' },
+                { label: 'Conditions de vente',          href: '/conditions-de-vente' },
+                { label: 'Politique de confidentialité', href: '/politique-de-confidentialite' },
+                { label: 'Livraison & retours',          href: '/livraison-retours' },
+                { label: 'FAQ',                          href: '/faq' },
               ].map((item) => (
-                <li key={item}>
-                  <Link href="#" className="hover:text-rose-400 transition-colors">
-                    {item}
+                <li key={item.label}>
+                  <Link href={item.href} className="hover:text-rose-400 transition-colors">
+                    {item.label}
                   </Link>
                 </li>
               ))}

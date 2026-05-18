@@ -2,8 +2,6 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { Heart, ShoppingBag, Trash2 } from 'lucide-react';
-import Navbar from '@/components/Navbar';
-import Footer from '@/components/Footer';
 import { useFavorites } from '@/context/FavoritesContext';
 import { useCart } from '@/context/CartContext';
 
@@ -12,9 +10,7 @@ export default function FavorisPage() {
   const { addItem } = useCart();
 
   return (
-    <>
-      <Navbar />
-      <main className="min-h-screen bg-gray-50 pt-24 pb-16">
+    <main className="min-h-screen bg-gray-50 pt-24 pb-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Header */}
           <div className="mb-10">
@@ -117,7 +113,5 @@ export default function FavorisPage() {
           )}
         </div>
       </main>
-      <Footer />
-    </>
   );
 }

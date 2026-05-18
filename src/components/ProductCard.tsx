@@ -12,8 +12,16 @@ export default function ProductCard({ product }: { product: Product }) {
   const { addItem } = useCart();
   const { isFavorite, toggleItem } = useFavorites();
   const favorited = isFavorite(product.id);
-  const price = Number(product.price);
-  const origPrice = product.originalPrice ? Number(product.originalPrice) : null;
+
+  // Variant-aware pricing
+  const activeVariants = (product.variants ?? []).filter(v => v.isActive && v.price != null);
+  const hasVariantPricing = activeVariants.length > 0;
+  const variantMinPrice = hasVariantPricing
+    ? Math.min(...activeVariants.map(v => Number(v.price)))
+    : null;
+
+  const price = variantMinPrice ?? Number(product.price);
+  const origPrice = !hasVariantPricing && product.originalPrice ? Number(product.originalPrice) : null;
   const discount = calcDiscount(price, origPrice);
   const img = getProductImage(product);
 
@@ -65,13 +73,21 @@ export default function ProductCard({ product }: { product: Product }) {
         </div>
         <div className="flex items-center justify-between mt-4">
           <div>
-            <span className="text-lg font-bold text-gray-900">
-              {price.toFixed(3)} {product.currency}
-            </span>
+            <div className="flex items-baseline gap-1">
+              {hasVariantPricing && (
+                <span className="text-xs text-gray-400 font-normal">À partir de</span>
+              )}
+              <span className="text-lg font-bold text-gray-900">
+                {price.toFixed(3)} {product.currency}
+              </span>
+            </div>
             {origPrice && (
-              <span className="ml-2 text-sm text-gray-400 line-through">
+              <span className="text-sm text-gray-400 line-through">
                 {origPrice.toFixed(3)}
               </span>
+            )}
+            {hasVariantPricing && (
+              <p className="text-xs text-rose-500 mt-0.5">{activeVariants.length} variante{activeVariants.length > 1 ? 's' : ''}</p>
             )}
           </div>
           <button

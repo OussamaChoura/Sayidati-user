@@ -1,7 +1,5 @@
 export const runtime = 'edge';
 import { getProducts, getCategories, getBrands } from '@/lib/api';
-import Navbar from '@/components/Navbar';
-import Footer from '@/components/Footer';
 import ProductsClient from './ProductsClient';
 import type { Metadata } from 'next';
 
@@ -40,9 +38,7 @@ export default async function ProduitsPage({
   ]);
 
   return (
-    <>
-      <Navbar />
-      <main className="pt-16 min-h-screen">
+    <main className="pt-16 min-h-screen">
         <ProductsClient
           initialData={productsData}
           categories={categories}
@@ -55,8 +51,6 @@ export default async function ProduitsPage({
           initialInStock={searchParams.inStock === 'true'}
           initialPage={page}
         />
-      </main>
-      <Footer />
-    </>
+    </main>
   );
 }

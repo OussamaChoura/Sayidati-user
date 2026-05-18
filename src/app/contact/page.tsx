@@ -1,5 +1,3 @@
-import Navbar from '@/components/Navbar';
-import Footer from '@/components/Footer';
 import { MapPin, Phone, Mail, Clock } from 'lucide-react';
 import type { Metadata } from 'next';
 
@@ -12,9 +10,7 @@ export const metadata: Metadata = {
 
 export default function ContactPage() {
   return (
-    <>
-      <Navbar />
-      <main className="pt-16 min-h-screen">
+    <main className="pt-16 min-h-screen">
         {/* Hero */}
         <div className="bg-rose-50 py-16 text-center">
           <p className="text-rose-500 uppercase tracking-widest text-sm font-semibold mb-2">Support</p>
@@ -164,7 +160,5 @@ export default function ContactPage() {
           </div>
         </div>
       </main>
-      <Footer />
-    </>
   );
 }
