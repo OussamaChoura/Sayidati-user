@@ -54,7 +54,7 @@ export default function ProductCard({ product }: { product: Product }) {
           <Heart
             size={16}
             fill={favorited ? '#f43f5e' : 'none'}
-            className={favorited ? 'text-rose-500' : 'text-rose-500'}
+            className="text-rose-500"
           />
         </button>
       </Link>
@@ -68,8 +68,7 @@ export default function ProductCard({ product }: { product: Product }) {
           </h3>
         </Link>
         <div className="flex items-center gap-2 mt-2">
-          <StarRating rating={Number(product.rating)} size={12} />
-          <span className="text-xs text-gray-400">({product.reviewCount})</span>
+          <StarRating rating={Number(product.rating)} count={product.reviewsCount} size={12} />
         </div>
         <div className="flex items-center justify-between mt-4">
           <div>

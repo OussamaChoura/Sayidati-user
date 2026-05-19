@@ -2,9 +2,10 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useCart } from '@/context/CartContext';
+import { useSiteSettings } from '@/context/SiteSettingsContext';
 import { getProductImage } from '@/lib/utils';
 import Image from 'next/image';
-import { CheckCircle, Loader2, Banknote, Smartphone, Building2, CreditCard, FileText } from 'lucide-react';
+import { CheckCircle, Loader2, Banknote, Smartphone, Building2, CreditCard, FileText, Truck } from 'lucide-react';
 
 type PaymentMethod = 'cod' | 'd17' | 'bank_transfer' | 'edinar' | 'cheque';
 
@@ -55,11 +56,13 @@ const PAYMENT_OPTIONS: PaymentOption[] = [
   },
 ];
 
-const SHIPPING = 7;
-
 export default function CommandePage() {
   const { items, total, clearCart } = useCart();
   const router = useRouter();
+  const settings = useSiteSettings();
+  const shippingFeeFromSettings = parseFloat(settings['shipping_cost'] || '7');
+  const freeThreshold = parseFloat(settings['free_shipping_threshold'] || '150');
+  const SHIPPING = total >= freeThreshold ? 0 : shippingFeeFromSettings;
   const [loading, setLoading] = useState(false);
   const [orderId, setOrderId] = useState('');
   const [success, setSuccess] = useState(false);
@@ -272,8 +275,19 @@ export default function CommandePage() {
                     </div>
                     <div className="flex justify-between">
                       <span className="text-gray-500">Livraison</span>
-                      <span className="font-medium">{SHIPPING.toFixed(3)} TND</span>
+                      {SHIPPING === 0 ? (
+                        <span className="font-medium text-green-600 flex items-center gap-1">
+                          <Truck size={14} /> Gratuite
+                        </span>
+                      ) : (
+                        <span className="font-medium">{SHIPPING.toFixed(3)} TND</span>
+                      )}
                     </div>
+                    {SHIPPING > 0 && freeThreshold > 0 && (
+                      <p className="text-xs text-gray-400">
+                        Livraison gratuite dès {freeThreshold.toFixed(3)} TND
+                      </p>
+                    )}
                     <div className="flex justify-between font-bold text-base border-t pt-3 mt-1">
                       <span>Total</span>
                       <span className="text-rose-600">{(total + SHIPPING).toFixed(3)} TND</span>

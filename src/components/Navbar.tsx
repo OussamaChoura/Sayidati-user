@@ -6,8 +6,7 @@ import { Menu, X, ShoppingBag, Search, Heart, ChevronDown } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
 import { useFavorites } from '@/context/FavoritesContext';
 import { CATEGORY_META } from '@/lib/categoryMeta';
-
-const API = process.env.NEXT_PUBLIC_API_URL || 'https://sayidati-backend-php-production.up.railway.app';
+import { API_URL } from '@/lib/api';
 
 interface NavCategory { slug: string; name: string; description: string; icon: string; }
 
@@ -26,7 +25,7 @@ export default function Navbar({ initialCategories }: { initialCategories?: NavC
 
   useEffect(() => {
     if (initialCategories && initialCategories.length > 0) return;
-    fetch(`${API}/api/v1/categories`)
+    fetch(`${API_URL}/api/v1/categories`)
       .then((r) => r.ok ? r.json() : null)
       .then((data: { slug: string; nameFr: string; description: string }[] | null) => {
         if (!data) return;
@@ -76,8 +75,8 @@ export default function Navbar({ initialCategories }: { initialCategories?: NavC
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
 
         {/* Logo */}
-        <Link href="/" className="font-serif text-2xl font-bold text-rose-600 tracking-wide shrink-0">
-          Sayidati
+        <Link href="/" className="shrink-0 flex items-center">
+          <img src="/logo.png" alt="Sayidati" className="h-14 w-auto object-contain" />
         </Link>
 
         {/* Desktop Nav */}

@@ -37,7 +37,7 @@ export default async function CategoriesPage() {
             {categories.map((cat) => {
               const m = CATEGORY_META[cat.slug] ?? { icon: '🛍️', color: 'from-gray-900/70', image: `https://picsum.photos/seed/${cat.slug}/800/600`, description: cat.description ?? '', shortDescription: '' };
               const image = cat.imageUrl || m.image;
-              const count = cat._count?.products ?? 0;
+              const count = cat.productsCount ?? 0;
               return (
                 <Link
                   key={cat.slug}

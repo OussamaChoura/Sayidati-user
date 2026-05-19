@@ -53,7 +53,7 @@ export default function ProductJsonLd({ product }: { product: Product }) {
     aggregateRating: {
       '@type': 'AggregateRating',
       ratingValue: Number(product.rating),
-      reviewCount: product.reviewCount,
+      reviewCount: product.reviewsCount,
     },
   };
 

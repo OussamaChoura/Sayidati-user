@@ -1,40 +1,47 @@
-export default function WebsiteJsonLd() {
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://sayidati.tn';
+
+export default function WebsiteJsonLd({ settings = {} }: { settings?: Record<string, string> }) {
+  const phone    = settings['contact.phone']    || settings['site_phone']    || '';
+  const socials  = [
+    settings['social.facebook']  || settings['facebook_url'],
+    settings['social.instagram'] || settings['instagram_url'],
+    settings['social.tiktok']    || settings['tiktok_url'],
+  ].filter(Boolean) as string[];
+
   const schema = {
     '@context': 'https://schema.org',
     '@graph': [
       {
         '@type': 'WebSite',
-        '@id': 'https://sayidati.tn/#website',
-        url: 'https://sayidati.tn/',
-        name: 'Sayidati',
-        description: 'Parfums, soins et maquillage pour femme en Tunisie.',
+        '@id': `${SITE_URL}/#website`,
+        url: `${SITE_URL}/`,
+        name: settings['site_name'] || 'Sayidati',
+        description: settings['meta_description'] || 'Parfums, soins et maquillage pour femme en Tunisie.',
         inLanguage: 'fr',
         potentialAction: {
           '@type': 'SearchAction',
-          target: 'https://sayidati.tn/recherche?q={search_term_string}',
+          target: `${SITE_URL}/recherche?q={search_term_string}`,
           'query-input': 'required name=search_term_string',
         },
       },
       {
         '@type': 'Organization',
-        '@id': 'https://sayidati.tn/#organization',
-        name: 'Sayidati',
-        url: 'https://sayidati.tn/',
+        '@id': `${SITE_URL}/#organization`,
+        name: settings['site_name'] || 'Sayidati',
+        url: `${SITE_URL}/`,
         logo: {
           '@type': 'ImageObject',
-          url: 'https://sayidati.tn/logo.png',
+          url: `${SITE_URL}/logo.png`,
         },
-        contactPoint: {
-          '@type': 'ContactPoint',
-          telephone: '+216-00-000-000',
-          contactType: 'customer service',
-          availableLanguage: ['French', 'Arabic'],
-        },
-        sameAs: [
-          'https://www.facebook.com/sayidati',
-          'https://www.instagram.com/sayidati',
-          'https://www.tiktok.com/@sayidati',
-        ],
+        ...(phone && {
+          contactPoint: {
+            '@type': 'ContactPoint',
+            telephone: phone,
+            contactType: 'customer service',
+            availableLanguage: ['French', 'Arabic'],
+          },
+        }),
+        ...(socials.length > 0 && { sameAs: socials }),
       },
     ],
   };

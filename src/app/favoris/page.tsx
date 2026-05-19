@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { Heart, ShoppingBag, Trash2 } from 'lucide-react';
 import { useFavorites } from '@/context/FavoritesContext';
 import { useCart } from '@/context/CartContext';
+import { getProductImage } from '@/lib/utils';
 
 export default function FavorisPage() {
   const { items, removeItem, count } = useFavorites();
@@ -44,7 +45,7 @@ export default function FavorisPage() {
               {items.map((product) => {
                 const price = Number(product.price);
                 const origPrice = product.originalPrice ? Number(product.originalPrice) : null;
-                const img = product.imageUrl || `https://picsum.photos/seed/${product.id}/400/400`;
+                const img = getProductImage(product, 400);
 
                 return (
                   <div

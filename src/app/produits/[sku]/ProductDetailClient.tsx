@@ -158,7 +158,7 @@ export default function ProductDetailClient({
             <h1 className="font-serif text-4xl font-bold text-gray-900 mt-2">{product.nameFr}</h1>
           </div>
 
-          <StarRating rating={Number(product.rating)} count={product.reviewCount} size={16} />
+          <StarRating rating={Number(product.rating)} count={product.reviewsCount} size={16} />
 
           {/* Price */}
           <div className="flex items-end gap-3">

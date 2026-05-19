@@ -17,7 +17,9 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-10">
           {/* Brand */}
           <div className="md:col-span-1">
-            <h2 className="font-serif text-3xl font-bold text-white mb-3">Sayidati</h2>
+            <div className="mb-3">
+              <img src="/logo-white.png" alt="Sayidati" className="h-16 w-auto object-contain" />
+            </div>
             <p className="text-sm leading-relaxed text-gray-400 mb-5">
               Votre destination beauté en ligne. Parfums, soins et maquillage pour la femme moderne.
             </p>

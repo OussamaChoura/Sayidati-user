@@ -1,6 +1,6 @@
 import type { Category, PaginatedProducts, Product } from './types';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://sayidati-backend-php-production.up.railway.app';
+export const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
 
 async function apiFetch<T>(path: string, init?: RequestInit): Promise<T> {
   const res = await fetch(`${API_URL}${path}`, init ?? { cache: 'no-store' });

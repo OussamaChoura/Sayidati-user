@@ -1,11 +1,17 @@
 'use client';
-import { X, Minus, Plus, ShoppingBag, Trash2 } from 'lucide-react';
+import { X, Minus, Plus, ShoppingBag, Trash2, Truck } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useCart } from '@/context/CartContext';
+import { useSiteSettings } from '@/context/SiteSettingsContext';
+import { getProductImage } from '@/lib/utils';
 
 export default function CartSidebar() {
   const { items, count, total, isOpen, closeCart, removeItem, updateQty } = useCart();
+  const settings = useSiteSettings();
+  const shippingFee = parseFloat(settings['shipping_cost'] || '7');
+  const freeThreshold = parseFloat(settings['free_shipping_threshold'] || '150');
+  const shipping = total >= freeThreshold ? 0 : shippingFee;
 
   return (
     <>
@@ -57,7 +63,7 @@ export default function CartSidebar() {
               <div key={item.product.id} className="flex gap-3 bg-gray-50 rounded-xl p-3">
                 <div className="relative w-16 h-16 shrink-0 rounded-lg overflow-hidden">
                   <Image
-                    src={item.product.imageUrl || `https://picsum.photos/seed/${item.product.sku}/200/200`}
+                    src={getProductImage(item.product, 200)}
                     alt={item.product.nameFr}
                     fill
                     className="object-cover"
@@ -107,11 +113,17 @@ export default function CartSidebar() {
             </div>
             <div className="flex justify-between text-sm">
               <span className="text-gray-600">Livraison</span>
-              <span className="text-green-600 font-medium">+7.000 TND</span>
+              {shipping === 0 ? (
+                <span className="text-green-600 font-medium flex items-center gap-1">
+                  <Truck size={13} /> Gratuite
+                </span>
+              ) : (
+                <span className="text-gray-700 font-medium">+{shipping.toFixed(3)} TND</span>
+              )}
             </div>
             <div className="flex justify-between font-bold text-base border-t pt-3">
               <span>Total</span>
-              <span className="text-rose-600">{(total + 7).toFixed(3)} TND</span>
+              <span className="text-rose-600">{(total + shipping).toFixed(3)} TND</span>
             </div>
             <Link
               href="/commande"

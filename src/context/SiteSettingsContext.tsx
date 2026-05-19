@@ -1,7 +1,6 @@
 'use client';
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
-
-const API = process.env.NEXT_PUBLIC_API_URL || 'https://sayidati-backend-php-production.up.railway.app';
+import { API_URL } from '@/lib/api';
 
 type Settings = Record<string, string>;
 
@@ -11,7 +10,7 @@ export function SiteSettingsProvider({ children }: { children: ReactNode }) {
   const [settings, setSettings] = useState<Settings>({});
 
   useEffect(() => {
-    fetch(`${API}/api/v1/settings`)
+    fetch(`${API_URL}/api/v1/settings`)
       .then((r) => r.ok ? r.json() : {})
       .then(setSettings)
       .catch(() => {});

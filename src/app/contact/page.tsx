@@ -1,5 +1,6 @@
 import { MapPin, Phone, Mail, Clock } from 'lucide-react';
 import type { Metadata } from 'next';
+import { getSettings } from '@/lib/api';
 
 export const runtime = 'edge';
 
@@ -8,7 +9,9 @@ export const metadata: Metadata = {
   description: 'Contactez l\'équipe Sayidati pour toute question sur nos produits ou votre commande.',
 };
 
-export default function ContactPage() {
+export default async function ContactPage() {
+  let s: Record<string, string> = {};
+  try { s = await getSettings(); } catch {}
   return (
     <main className="pt-16 min-h-screen">
         {/* Hero */}
@@ -103,24 +106,24 @@ export default function ContactPage() {
                 {
                   icon: <MapPin size={20} className="text-rose-500 shrink-0 mt-0.5" />,
                   label: 'Adresse',
-                  value: 'Tunis, Tunisie',
+                  value: s['contact.address'] || s['site_address'] || 'Tunis, Tunisie',
                 },
                 {
                   icon: <Phone size={20} className="text-rose-500 shrink-0" />,
                   label: 'Téléphone',
-                  value: '+216 00 000 000',
-                  href: 'tel:+21600000000',
+                  value: s['contact.phone'] || s['site_phone'] || '+216 00 000 000',
+                  href: `tel:${(s['contact.phone'] || s['site_phone'] || '+21600000000').replace(/\s/g, '')}`,
                 },
                 {
                   icon: <Mail size={20} className="text-rose-500 shrink-0" />,
                   label: 'Email',
-                  value: 'contact@sayidati.tn',
-                  href: 'mailto:contact@sayidati.tn',
+                  value: s['contact.email'] || s['site_email'] || 'contact@sayidati.tn',
+                  href: `mailto:${s['contact.email'] || s['site_email'] || 'contact@sayidati.tn'}`,
                 },
                 {
                   icon: <Clock size={20} className="text-rose-500 shrink-0" />,
                   label: 'Horaires',
-                  value: 'Lun – Sam : 9h00 – 18h00',
+                  value: s['business_hours'] || 'Lun – Sam : 9h00 – 18h00',
                 },
               ].map((item) => (
                 <div key={item.label} className="flex items-start gap-3">
@@ -146,7 +149,7 @@ export default function ContactPage() {
                 Réponse rapide garantie. Envoyez-nous vos demandes directement sur WhatsApp.
               </p>
               <a
-                href="https://wa.me/21600000000"
+                href={`https://wa.me/${(s['contact.whatsapp'] || s['site_phone'] || '21600000000').replace(/\D/g, '')}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white px-5 py-3 rounded-full font-medium transition-colors text-sm"

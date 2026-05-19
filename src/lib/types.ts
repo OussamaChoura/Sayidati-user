@@ -27,7 +27,7 @@ export interface Product {
   isVisible: boolean;
   badge: string | null;
   rating: string;
-  reviewCount: number;
+  reviewsCount: number;
   categoryId: string;
   category?: Category;
   variants: Variant[];
