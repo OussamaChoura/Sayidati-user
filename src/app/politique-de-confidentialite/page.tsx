@@ -13,6 +13,8 @@ export default async function PrivacyPage() {
   let s: Record<string, string> = {};
   try { s = await getSettings(); } catch {}
 
+  const contactEmail = s['site_email'] || 'contact@sayidati.tn';
+
   const content = s['privacy_policy'] ||
     `Sayidati accorde une importance primordiale à la protection de vos données personnelles.
 
@@ -29,7 +31,7 @@ PARTAGE
 Nous ne vendons, n'échangeons ni ne transférons vos données personnelles à des tiers, sauf dans le cas nécessaire à la livraison de votre commande (transporteur).
 
 VOS DROITS
-Conformément à la loi, vous disposez d'un droit d'accès, de rectification et de suppression de vos données. Pour exercer ce droit, contactez-nous à contact@sayidati.tn
+Conformément à la loi, vous disposez d'un droit d'accès, de rectification et de suppression de vos données. Pour exercer ce droit, contactez-nous à ${contactEmail}
 
 COOKIES
 Notre site utilise des cookies pour améliorer votre expérience de navigation. Vous pouvez désactiver les cookies dans les paramètres de votre navigateur.

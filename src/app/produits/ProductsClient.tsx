@@ -172,7 +172,7 @@ export default function ProductsClient({
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
       <div className="mb-6">
-        <h1 className="font-serif text-4xl font-bold text-gray-900">Nos Produits</h1>
+        <h1 className="font-serif text-3xl sm:text-4xl font-bold text-gray-900">Nos Produits</h1>
         <p className="text-gray-500 mt-1">{initialData.total} article{initialData.total !== 1 ? 's' : ''} disponible{initialData.total !== 1 ? 's' : ''}</p>
       </div>
 
@@ -241,7 +241,7 @@ export default function ProductsClient({
         {sidebarOpen && (
           <div className="lg:hidden fixed inset-0 z-50 flex">
             <div className="absolute inset-0 bg-black/40" onClick={() => setSidebarOpen(false)} />
-            <div className="relative ml-auto w-72 bg-white h-full overflow-y-auto p-5 shadow-xl">
+            <div className="relative ml-auto w-[80vw] max-w-72 bg-white h-full overflow-y-auto p-5 shadow-xl">
               <div className="flex items-center justify-between mb-5">
                 <h2 className="font-semibold text-gray-900">Filtres</h2>
                 <button onClick={() => setSidebarOpen(false)}><X size={20} /></button>

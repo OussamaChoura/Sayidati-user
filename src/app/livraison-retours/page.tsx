@@ -16,6 +16,7 @@ export default async function LivraisonPage() {
   const shippingCost      = s['shipping_cost'] || '7';
   const freeThreshold     = s['free_shipping_threshold'] || '150';
   const deliveryDelay     = s['delivery_delay'] || '1 à 3 jours ouvrables';
+  const contactEmail      = s['site_email'] || 'contact@sayidati.tn';
   const content           = s['return_policy'] || '';
 
   const defaultContent =
@@ -40,7 +41,7 @@ CONDITIONS DE RETOUR
 REMBOURSEMENT
 Le remboursement est effectué dans un délai de 7 jours ouvrables après réception et vérification de l'article retourné.
 
-Pour initier un retour, contactez-nous à contact@sayidati.tn ou via WhatsApp.`;
+Pour initier un retour, contactez-nous à ${contactEmail} ou via WhatsApp.`;
 
   const finalContent = content || defaultContent;
   const paragraphs = finalContent.split('\n').filter(Boolean);

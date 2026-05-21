@@ -182,14 +182,27 @@ export default function Navbar({ initialCategories }: { initialCategories?: NavC
           </button>
         </div>
 
-        {/* Mobile hamburger */}
-        <button
-          className="md:hidden text-gray-700"
-          onClick={() => setMenuOpen(!menuOpen)}
-          aria-label="Menu"
-        >
-          {menuOpen ? <X size={24} /> : <Menu size={24} />}
-        </button>
+        {/* Mobile icons + hamburger */}
+        <div className="md:hidden flex items-center gap-3 text-gray-600">
+          <button aria-label="Rechercher" onClick={() => { setSearchOpen((v) => !v); setMenuOpen(false); }} className={`hover:text-rose-600 transition-colors ${searchOpen ? 'text-rose-600' : ''}`}>
+            <Search size={20} />
+          </button>
+          <Link href="/favoris" aria-label="Favoris" className="hover:text-rose-600 transition-colors relative">
+            <Heart size={20} fill={favCount > 0 ? '#f43f5e' : 'none'} className={favCount > 0 ? 'text-rose-500' : ''} />
+            {favCount > 0 && (
+              <span className="absolute -top-2 -right-2 bg-rose-600 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">{favCount}</span>
+            )}
+          </Link>
+          <button aria-label="Panier" onClick={() => { setMenuOpen(false); openCart(); }} className="hover:text-rose-600 transition-colors relative">
+            <ShoppingBag size={20} />
+            {count > 0 && (
+              <span className="absolute -top-2 -right-2 bg-rose-600 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">{count}</span>
+            )}
+          </button>
+          <button className="text-gray-700 ml-1" onClick={() => setMenuOpen(!menuOpen)} aria-label="Menu">
+            {menuOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
+        </div>
       </div>
 
       {/* Mobile menu */}
@@ -249,15 +262,6 @@ export default function Navbar({ initialCategories }: { initialCategories?: NavC
           >
             Contact
           </Link>
-
-          {/* Mobile cart */}
-          <button
-            onClick={() => { setMenuOpen(false); openCart(); }}
-            className="flex items-center gap-2 text-gray-700 hover:text-rose-600 font-medium py-3"
-          >
-            <ShoppingBag size={18} />
-            Panier {count > 0 && <span className="bg-rose-600 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">{count}</span>}
-          </button>
         </div>
       )}
 

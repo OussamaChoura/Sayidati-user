@@ -49,7 +49,7 @@ export default function ProductCard({ product }: { product: Product }) {
         <button
           aria-label={favorited ? 'Retirer des favoris' : 'Ajouter aux favoris'}
           onClick={(e) => { e.preventDefault(); toggleItem(product); }}
-          className="absolute bottom-3 right-3 bg-white/90 backdrop-blur-sm p-2 rounded-full shadow hover:bg-rose-50 transition-colors opacity-0 group-hover:opacity-100 duration-300"
+          className="absolute bottom-3 right-3 bg-white/90 backdrop-blur-sm p-2.5 rounded-full shadow hover:bg-rose-50 transition-colors sm:opacity-0 sm:group-hover:opacity-100 duration-300"
         >
           <Heart
             size={16}
@@ -70,8 +70,15 @@ export default function ProductCard({ product }: { product: Product }) {
         <div className="flex items-center gap-2 mt-2">
           <StarRating rating={Number(product.rating)} count={product.reviewsCount} size={12} />
         </div>
-        <div className="flex items-center justify-between mt-4">
+        <div className="flex items-end justify-between mt-2">
           <div>
+            {origPrice ? (
+              <span className="text-sm text-gray-400 line-through block">
+                {origPrice.toFixed(3)} {product.currency}
+              </span>
+            ) : (
+              <span className="block text-sm invisible">-</span>
+            )}
             <div className="flex items-baseline gap-1">
               {hasVariantPricing && (
                 <span className="text-xs text-gray-400 font-normal">À partir de</span>
@@ -80,11 +87,6 @@ export default function ProductCard({ product }: { product: Product }) {
                 {price.toFixed(3)} {product.currency}
               </span>
             </div>
-            {origPrice && (
-              <span className="text-sm text-gray-400 line-through">
-                {origPrice.toFixed(3)}
-              </span>
-            )}
             {hasVariantPricing && (
               <p className="text-xs text-rose-500 mt-0.5">{activeVariants.length} variante{activeVariants.length > 1 ? 's' : ''}</p>
             )}

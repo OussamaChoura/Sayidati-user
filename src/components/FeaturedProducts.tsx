@@ -7,7 +7,7 @@ export default async function FeaturedProducts() {
   let featured = [];
   try {
     const result = await getProducts({ limit: 8 });
-    featured = result.data;
+    featured = Array.isArray(result.data) ? result.data : [];
   } catch {
     featured = [];
   }

@@ -3,7 +3,7 @@ import type { Category, PaginatedProducts, Product } from './types';
 export const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
 
 async function apiFetch<T>(path: string, init?: RequestInit): Promise<T> {
-  const res = await fetch(`${API_URL}${path}`, init ?? { cache: 'no-store' });
+  const res = await fetch(`${API_URL}${path}`, init ?? { next: { revalidate: 60 } } as RequestInit);
   if (!res.ok) throw new Error(`API error: ${res.status} ${path}`);
   return res.json() as Promise<T>;
 }
@@ -48,5 +48,5 @@ export async function getCategory(slug: string): Promise<Category> {
 }
 
 export async function getSettings(): Promise<Record<string, string>> {
-  return apiFetch<Record<string, string>>('/api/v1/settings');
+  return apiFetch<Record<string, string>>('/api/v1/settings', { next: { revalidate: 300 } } as RequestInit);
 }

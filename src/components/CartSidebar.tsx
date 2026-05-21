@@ -79,23 +79,23 @@ export default function CartSidebar() {
                   <div className="flex items-center gap-2 mt-2">
                     <button
                       onClick={() => updateQty(item.product.id, item.quantity - 1)}
-                      className="w-6 h-6 rounded-full border border-gray-300 flex items-center justify-center hover:border-rose-400 transition-colors"
+                      className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:border-rose-400 transition-colors"
                     >
-                      <Minus size={10} />
+                      <Minus size={12} />
                     </button>
                     <span className="text-sm font-medium w-5 text-center">{item.quantity}</span>
                     <button
                       onClick={() => updateQty(item.product.id, item.quantity + 1)}
-                      className="w-6 h-6 rounded-full border border-gray-300 flex items-center justify-center hover:border-rose-400 transition-colors"
+                      className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:border-rose-400 transition-colors"
                     >
-                      <Plus size={10} />
+                      <Plus size={12} />
                     </button>
                     <button
                       onClick={() => removeItem(item.product.id)}
-                      className="ml-auto text-gray-400 hover:text-red-500 transition-colors"
+                      className="ml-auto p-1.5 text-gray-400 hover:text-red-500 transition-colors"
                       aria-label="Supprimer"
                     >
-                      <Trash2 size={14} />
+                      <Trash2 size={16} />
                     </button>
                   </div>
                 </div>

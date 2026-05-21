@@ -4,6 +4,7 @@ import { CartProvider } from '@/context/CartContext';
 import { FavoritesProvider } from '@/context/FavoritesContext';
 import { SiteSettingsProvider } from '@/context/SiteSettingsContext';
 import CartSidebar from '@/components/CartSidebar';
+import CookieConsent from '@/components/CookieConsent';
 import AnnouncementBanner from '@/components/AnnouncementBanner';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
@@ -17,6 +18,10 @@ export const metadata: Metadata = {
   description:
     'Découvrez notre sélection exclusive de parfums, soins et produits de beauté pour femme. Livraison rapide en Tunisie.',
   keywords: ['parfums femme', 'beauté', 'soins', 'Tunisie', 'sayidati'],
+  icons: {
+    icon: '/favicon.ico',
+    apple: '/apple-icon.png',
+  },
   openGraph: {
     title: 'Sayidati – Parfums & Beauté Féminine',
     description: 'Votre destination beauté en ligne.',
@@ -55,6 +60,7 @@ export default async function RootLayout({
               {children}
               <Footer />
               <CartSidebar />
+              <CookieConsent />
             </FavoritesProvider>
           </CartProvider>
         </SiteSettingsProvider>

@@ -155,7 +155,7 @@ export default function ProductDetailClient({
             <p className="text-rose-500 text-sm font-semibold uppercase tracking-widest">
               {product.brand}
             </p>
-            <h1 className="font-serif text-4xl font-bold text-gray-900 mt-2">{product.nameFr}</h1>
+            <h1 className="font-serif text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mt-2">{product.nameFr}</h1>
           </div>
 
           <StarRating rating={Number(product.rating)} count={product.reviewsCount} size={16} />
@@ -259,7 +259,7 @@ export default function ProductDetailClient({
           </div>
 
           {/* Trust badges */}
-          <div className="grid grid-cols-3 gap-3 border-t pt-5">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 border-t pt-5">
             {[
               { icon: <Truck size={18} />, text: 'Livraison 1–3 jours' },
               { icon: <RotateCcw size={18} />, text: 'Retour 14 jours' },

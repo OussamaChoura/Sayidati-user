@@ -13,6 +13,11 @@ export default async function ConditionsPage() {
   let s: Record<string, string> = {};
   try { s = await getSettings(); } catch {}
 
+  const shippingCost  = s['shipping_cost'] || '7';
+  const freeThreshold = s['free_shipping_threshold'] || '150';
+  const deliveryDelay = s['delivery_delay'] || '1 à 3 jours ouvrables';
+  const contactEmail  = s['site_email'] || 'contact@sayidati.tn';
+
   const content = s['terms_of_service'] ||
     `Les présentes conditions générales de vente régissent les relations contractuelles entre Sayidati et ses clients.
 
@@ -28,12 +33,12 @@ PAIEMENT
 Le paiement s'effectue à la livraison (paiement contre remboursement) ou via les moyens de paiement disponibles sur le site.
 
 LIVRAISON
-Les délais de livraison sont donnés à titre indicatif. Sayidati ne pourra être tenu responsable des retards causés par le transporteur.
+Les délais de livraison sont de ${deliveryDelay} après expédition. Les frais de livraison sont de ${shippingCost} DT. La livraison est gratuite dès ${freeThreshold} DT d'achats. Sayidati ne pourra être tenu responsable des retards causés par le transporteur.
 
 RETOURS
 Vous disposez d'un délai de 14 jours à compter de la réception pour retourner un article. Les articles retournés doivent être dans leur état d'origine, non utilisés et dans leur emballage d'origine.
 
-Pour toute question, contactez-nous à contact@sayidati.tn`;
+Pour toute question, contactez-nous à ${contactEmail}`;
 
   const paragraphs = content.split('\n').filter(Boolean);
 

@@ -21,11 +21,11 @@ export default async function CategoriesPage() {
   return (
     <main className="pt-16 min-h-screen">
         {/* Page hero */}
-        <div className="bg-rose-50 py-16 text-center">
+        <div className="bg-rose-50 py-10 sm:py-16 text-center">
           <p className="text-rose-500 uppercase tracking-widest text-sm font-semibold mb-2">
             Explorer
           </p>
-          <h1 className="font-serif text-5xl font-bold text-gray-900">Nos Catégories</h1>
+          <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900">Nos Catégories</h1>
           <p className="mt-3 text-gray-500 max-w-lg mx-auto">
             Retrouvez tout ce dont vous avez besoin pour prendre soin de vous au quotidien.
           </p>

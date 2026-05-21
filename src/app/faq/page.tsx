@@ -4,32 +4,38 @@ import { ChevronRight, ChevronDown, HelpCircle } from 'lucide-react';
 import Link from 'next/link';
 import { useSiteSettings } from '@/context/SiteSettingsContext';
 
-const DEFAULT_FAQ = [
-  {
-    q: 'Comment passer une commande ?',
-    a: 'Ajoutez les articles souhaités à votre panier, puis cliquez sur « Commander ». Renseignez vos coordonnées et validez. Vous serez contacté(e) pour confirmer votre commande.',
-  },
-  {
-    q: 'Quels sont les délais de livraison ?',
-    a: 'Nous livrons généralement en 1 à 3 jours ouvrables partout en Tunisie, à partir de la confirmation de votre commande.',
-  },
-  {
-    q: 'Puis-je retourner un article ?',
-    a: 'Vous disposez d\'un délai de 14 jours après réception pour retourner un article non ouvert et dans son emballage d\'origine. Les produits ouverts (cosmétiques, parfums) ne peuvent pas être retournés pour des raisons d\'hygiène.',
-  },
-  {
-    q: 'Comment puis-je vous contacter ?',
-    a: 'Vous pouvez nous joindre par e-mail, téléphone ou WhatsApp. Retrouvez nos coordonnées en bas de page.',
-  },
-  {
-    q: 'Les produits sont-ils authentiques ?',
-    a: 'Oui, tous nos produits sont 100 % authentiques et soigneusement sélectionnés auprès de fournisseurs agréés.',
-  },
-  {
-    q: 'La livraison est-elle gratuite ?',
-    a: 'La livraison est offerte dès 150 DT d\'achats. En dessous de ce seuil, des frais de livraison s\'appliquent.',
-  },
-];
+function getDefaultFaq(s: Record<string, string>) {
+  const shippingCost  = s['shipping_cost'] || '7';
+  const freeThreshold = s['free_shipping_threshold'] || '150';
+  const deliveryDelay = s['delivery_delay'] || '1 à 3 jours ouvrables';
+
+  return [
+    {
+      q: 'Comment passer une commande ?',
+      a: 'Ajoutez les articles souhaités à votre panier, puis cliquez sur « Commander ». Renseignez vos coordonnées et validez. Vous serez contacté(e) pour confirmer votre commande.',
+    },
+    {
+      q: 'Quels sont les délais de livraison ?',
+      a: `Nous livrons généralement en ${deliveryDelay} partout en Tunisie, à partir de la confirmation de votre commande.`,
+    },
+    {
+      q: 'Puis-je retourner un article ?',
+      a: 'Vous disposez d\'un délai de 14 jours après réception pour retourner un article non ouvert et dans son emballage d\'origine. Les produits ouverts (cosmétiques, parfums) ne peuvent pas être retournés pour des raisons d\'hygiène.',
+    },
+    {
+      q: 'Comment puis-je vous contacter ?',
+      a: 'Vous pouvez nous joindre par e-mail, téléphone ou WhatsApp. Retrouvez nos coordonnées en bas de page.',
+    },
+    {
+      q: 'Les produits sont-ils authentiques ?',
+      a: 'Oui, tous nos produits sont 100 % authentiques et soigneusement sélectionnés auprès de fournisseurs agréés.',
+    },
+    {
+      q: 'La livraison est-elle gratuite ?',
+      a: `La livraison est offerte dès ${freeThreshold} DT d'achats. En dessous de ce seuil, des frais de livraison de ${shippingCost} DT s'appliquent.`,
+    },
+  ];
+}
 
 /** Parse raw text into Q&A pairs.
  * Supports formats:
@@ -90,7 +96,7 @@ export default function FaqPage() {
   const s = useSiteSettings();
   const raw = s['faq'] || '';
   const parsed = raw.trim() ? parseFaq(raw) : [];
-  const items = parsed.length > 0 ? parsed : DEFAULT_FAQ;
+  const items = parsed.length > 0 ? parsed : getDefaultFaq(s);
 
   return (
     <main className="pt-16 min-h-screen">

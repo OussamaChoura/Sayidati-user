@@ -156,10 +156,10 @@ export default function CommandePage() {
 
               <div className="lg:col-span-3 space-y-6">
 
-                <div className="bg-white rounded-3xl shadow-sm p-8">
+                <div className="bg-white rounded-3xl shadow-sm p-5 sm:p-8">
                   <h2 className="font-serif text-xl font-bold text-gray-900 mb-6">Informations de livraison</h2>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="col-span-2">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="sm:col-span-2">
                       <label className="block text-sm font-medium text-gray-700 mb-1">Nom complet *</label>
                       <input type="text" name="customerName" value={form.customerName} onChange={handleChange} required
                         className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-rose-300"
@@ -177,7 +177,7 @@ export default function CommandePage() {
                         className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-rose-300"
                         placeholder="vous@email.com" />
                     </div>
-                    <div className="col-span-2">
+                    <div className="sm:col-span-2">
                       <label className="block text-sm font-medium text-gray-700 mb-1">Adresse</label>
                       <input type="text" name="address" value={form.address} onChange={handleChange}
                         className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-rose-300"
@@ -198,7 +198,7 @@ export default function CommandePage() {
                   </div>
                 </div>
 
-                <div className="bg-white rounded-3xl shadow-sm p-8">
+                <div className="bg-white rounded-3xl shadow-sm p-5 sm:p-8">
                   <h2 className="font-serif text-xl font-bold text-gray-900 mb-6">Mode de paiement</h2>
                   <div className="space-y-3">
                     {PAYMENT_OPTIONS.map((opt) => {
